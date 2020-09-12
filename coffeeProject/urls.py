@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('coffee/', include('coffee.urls')),
+    path('api/coffee/', include('coffee.api.urls', namespace='coffee-api')),
 ]
