@@ -1,3 +1,4 @@
+from rest_framework.utils.serializer_helpers import ReturnDict
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -20,8 +21,8 @@ class CoffeeMachines(APIView):
         # get data from DB depending on data from request
         if not water_line_compatible and not coffee_machine_models:
             json_data = CoffeeMachineSerializer(
-                CoffeeMachine.objects.filter(product_type=product_type), many=True).data
-        if not product_type and not coffee_machine_models:
+                CoffeeMachine.objects.filter(product_type=product_type, ), many=True).data
+        elif not product_type and not coffee_machine_models:
             json_data = CoffeeMachineSerializer(
                 CoffeeMachine.objects.filter(water_line_compatible=water_line_compatible), many=True).data
         elif not water_line_compatible:
@@ -46,7 +47,7 @@ class CoffeeMachines(APIView):
 
         if len(json_data) == 0:
             json_data = {"error": "Please enter a valid data"}
-            global_status = status.HTTP_204_NO_CONTENT
+            global_status = status.HTTP_400_BAD_REQUEST
 
         return Response(json_data, global_status)
 
@@ -91,6 +92,6 @@ class CoffeePods(APIView):
 
         if len(json_data) == 0:
             json_data = {"error": "Please enter a valid data"}
-            global_status = status.HTTP_204_NO_CONTENT
+            global_status = status.HTTP_400_BAD_REQUEST
 
         return Response(json_data, global_status)
